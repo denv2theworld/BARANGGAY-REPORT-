@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Barangay 123 Report Website</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>Barangay 123 Report Website</h1>
+    <h2>Report Form</h2>
+    <p>Kindly report any issues or concern in your area</p>
+
+    <!-- 1. Wrapped in form-card -->
+    <div class="form-card">
+      
+      <!-- THE FORM -->
+      <form id="enrollmentForm">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" placeholder="e.g., Juan Dela Cruz" required>
+        </div>
+
+        <div class="form-group">
+          <label for="mobilenumber">Mobile No.</label>
+          <input type="number" id="mobilenumber" placeholder="09123456789" required>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location:</label>
+          <select id="location" required>
+            <option value="">location</option>
+            <option value="sitio munayan">sitio munayan</option>
+            <option value="sitio bulangan">sitio bulangan</option>
+            <option value="sitio calamaisan">sitio calamaisan</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address:</label>
+          <input type="text" id="address" placeholder="full address" required>
+        </div>
+
+        <!-- FIXED: Added 'div' tag, 'id="description"', and closing </div> -->
+        <div class="form-group">
+          <label for="description">Description</label>
+          <input type="text" id="description" placeholder="State your concern description here....." required>
+        </div>
+
+        <button type="submit" id="submitBtn">Submit Report</button>
+      </form>
+
+      <!-- SUCCESS DISPLAY -->
+      <div id="successCard" class="hidden">
+        <div class="success-icon">✓</div>
+        <h3>Report Submitted!</h3>
+        <p class="success-subtext">Thank you for helping keep our community safe. Your report has been logged.</p>
+          
+        <div class="report-summary">
+          <p><strong>Status:</strong> <span class="badge">Pending Barangay Review</span></p>
+          <p><strong>Reporter:</strong> <span id="summaryName"></span></p>
+          <p><strong>Mobile:</strong> <span id="summaryMobile"></span></p>
+          <p><strong>Location:</strong> <span id="summaryLocation"></span></p>
+          <p><strong>Description:</strong> <span id="summaryDesc"></span></p>
+        </div>
+
+        <button id="resetBtn" type="button">Submit Another Report</button>
+      </div>
+
+    </div> <!-- Closing .form-card -->
+
+    <h4>Your concern will be directed to the barangay hall and will provide a solution as soon as possible</h4>
+    <p>All Rights Reserved 2026.</p>
+
+    <script src="script.js"></script>
+  </body>
+</html>
