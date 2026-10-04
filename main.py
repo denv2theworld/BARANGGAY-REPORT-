@@ -12,7 +12,7 @@ app = FastAPI(title="Barangay 123 Issue Report API")
 # allow_origins=["https://yourdomain.com"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://baranggay-report.netlify.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
