@@ -27,9 +27,10 @@ enrollmentForm.addEventListener('submit', async function(event) {
     submitBtn.textContent = "Submitting...";
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/issues`, {
+        const response = await fetch(`${API_BASE_URL}/api/reports`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({
                 name: nameVal,
                 mobile: mobileVal,
@@ -41,15 +42,18 @@ enrollmentForm.addEventListener('submit', async function(event) {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.detail || 'Something went wrong. Please try again.');
+            const message = errorData.errors
+                ? Object.values(errorData.errors).join(' ')
+                : (errorData.error || 'Something went wrong. Please try again.');
+            throw new Error(message);
         }
 
-        const savedReport = await response.json();
-
-        summaryName.textContent = savedReport.name;
-        summaryMobile.textContent = savedReport.mobile;
-        summaryLocation.textContent = savedReport.location;
-        summaryDesc.textContent = savedReport.description;
+        // Backend only returns {id, status} on success, not the full record,
+        // so we show back what the user typed in.
+        summaryName.textContent = nameVal;
+        summaryMobile.textContent = mobileVal;
+        summaryLocation.textContent = locationVal;
+        summaryDesc.textContent = descVal;
 
         enrollmentForm.classList.add('hidden');
         successCard.classList.remove('hidden');
