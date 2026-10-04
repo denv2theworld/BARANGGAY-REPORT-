@@ -1,7 +1,11 @@
+// 0. Point this at your running backend.
+const API_BASE_URL = "https://baranggay-report.onrender.com";
+
 // 1. Select DOM elements
 const enrollmentForm = document.getElementById('enrollmentForm');
 const successCard = document.getElementById('successCard');
 const resetBtn = document.getElementById('resetBtn');
+const submitBtn = document.getElementById('submitBtn');
 
 // Summary field references
 const summaryName = document.getElementById('summaryName');
@@ -10,28 +14,53 @@ const summaryLocation = document.getElementById('summaryLocation');
 const summaryDesc = document.getElementById('summaryDesc');
 
 // 2. Form submission handler
-enrollmentForm.addEventListener('submit', function(event) {
-    // Prevent page reload
+enrollmentForm.addEventListener('submit', async function(event) {
     event.preventDefault();
 
-    // Capture values from input fields
     const nameVal = document.getElementById('name').value;
     const mobileVal = document.getElementById('mobilenumber').value;
     const locationVal = document.getElementById('location').value;
+    const addressVal = document.getElementById('address').value;
     const descVal = document.getElementById('description').value;
 
-    // Display captured details on the success summary card
-    summaryName.textContent = nameVal;
-    summaryMobile.textContent = mobileVal;
-    summaryLocation.textContent = locationVal;
-    summaryDesc.textContent = descVal;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
 
-    // Hide the form and show the success card
-    enrollmentForm.classList.add('hidden');
-    successCard.classList.remove('hidden');
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/issues`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: nameVal,
+                mobile: mobileVal,
+                location: locationVal,
+                address: addressVal,
+                description: descVal,
+            }),
+        });
 
-    // Reset input fields
-    enrollmentForm.reset();
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.detail || 'Something went wrong. Please try again.');
+        }
+
+        const savedReport = await response.json();
+
+        summaryName.textContent = savedReport.name;
+        summaryMobile.textContent = savedReport.mobile;
+        summaryLocation.textContent = savedReport.location;
+        summaryDesc.textContent = savedReport.description;
+
+        enrollmentForm.classList.add('hidden');
+        successCard.classList.remove('hidden');
+        enrollmentForm.reset();
+
+    } catch (error) {
+        alert(`Report could not be submitted: ${error.message}`);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Report";
+    }
 });
 
 // 3. Reset button to submit a new report
