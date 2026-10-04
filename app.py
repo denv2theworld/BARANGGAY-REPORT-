@@ -135,6 +135,19 @@ def portal():
     return send_from_directory(os.path.join(BASE_DIR, "protected"), "portal.html")
 
 
+@app.get("/script1.js")
+def portal_script():
+    # Served alongside portal.html so the browser's relative <script src="script1.js"> works.
+    # Not gated behind admin_only: even if fetched directly, it only talks to
+    # admin-only API routes, which still require a valid session to return data.
+    return send_from_directory(os.path.join(BASE_DIR, "protected"), "script1.js")
+
+
+@app.get("/styles1.css")
+def portal_styles():
+    return send_from_directory(os.path.join(BASE_DIR, "protected"), "styles1.css")
+
+
 # ---------- Reports API ----------
 @app.post("/api/reports")
 def create_report():
